@@ -19,7 +19,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "~"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -61,29 +61,39 @@ static const char *termcmd[]  = { "terminator", NULL };
 
 static Key keys[] = {
 	/* modifier             key    function        argument */
-	{ MODKEY,               33,    spawn,          {.v = dmenucmd } }, // space
+	{ MODKEY,               65,    spawn,          {.v = dmenucmd } }, // space
 	{ MODKEY|ShiftMask,     36,    spawn,          {.v = termcmd } }, // Return
+	{ MODKEY,               23,    view,           {0} },             // Tab
+	{ MODKEY,               36,    zoom,           {0} },             // Return
+
+	{ MODKEY,               24,    killclient,     {0} },             // q
+	/* 
 	{ MODKEY|ShiftMask,     56,    togglebar,      {0} },             // b
-	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j
-	{ MODKEY,               45,    focusstack,     {.i = -1 } },      // k
+	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j: switch focus
+	{ MODKEY,               45,    focusstack,     {.i = -1 } },      // k: swtich focus backward
 	{ MODKEY|ShiftMask,     31,    incnmaster,     {.i = +1 } },      // i
 	{ MODKEY|ShiftMask,     40,    incnmaster,     {.i = -1 } },      // d
-	{ MODKEY,               43,    setmfact,       {.f = -0.05} },    // h
-	{ MODKEY,               46,    setmfact,       {.f = +0.05} },    // l
-	{ MODKEY,               36,    zoom,           {0} },             // Return
-	{ MODKEY,               23,    view,           {0} },             // Tab
-	{ MODKEY,               54,    killclient,     {0} },             // q
+
+	{ MODKEY,               43,    setmfact,       {.f = -0.05} },    // h: set tab width
+	{ MODKEY,               46,    setmfact,       {.f = +0.05} },    // l: set tab width
 	{ MODKEY|ShiftMask,     28,    setlayout,      {.v = &layouts[0]} }, // t
 	{ MODKEY|ShiftMask,     41,    setlayout,      {.v = &layouts[1]} }, // f
 	{ MODKEY|ShiftMask,     58,    setlayout,      {.v = &layouts[2]} }, // m
-	/* { MODKEY,               65,    setlayout,      {0} },             // space */
-	/* { MODKEY|ShiftMask,     65,    togglefloating, {0} },             // space */
+
+	{ MODKEY,               65,    setlayout,      {0} },             // space 
+	{ MODKEY|ShiftMask,     65,    togglefloating, {0} },             // space
+	*/
 	{ MODKEY,               19,    view,           {.ui = ~0 } },     // 0
 	{ MODKEY|ShiftMask,     19,    tag,            {.ui = ~0 } },     // 0
+
 	{ MODKEY,               59,    focusmon,       {.i = -1 } },      // comma
 	{ MODKEY,               60,    focusmon,       {.i = +1 } },      // period
+
+	/*
 	{ MODKEY|ShiftMask,     59,    tagmon,         {.i = -1 } },      // comma
 	{ MODKEY|ShiftMask,     60,    tagmon,         {.i = +1 } },      // period
+	*/
+
 	TAGKEYS(                10,                    0)                 // 1
 	TAGKEYS(                11,                    1)                 // 2
 	TAGKEYS(                12,                    2)                 // 3
@@ -92,8 +102,8 @@ static Key keys[] = {
 	TAGKEYS(                15,                    5)                 // 6
 	TAGKEYS(                16,                    6)                 // 7
 	TAGKEYS(                17,                    7)                 // 8
-	TAGKEYS(                18,                    8)                 // 9
-	{ MODKEY|ShiftMask,     24,    quit,           {0} },             // q
+	TAGKEYS(                49,                    8)                 // ~
+	{ MODKEY|ShiftMask,     54,    quit,           {0} },             // c
 };
 
 /* button definitions */
