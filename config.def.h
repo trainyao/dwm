@@ -44,7 +44,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -57,27 +57,27 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "terminator", NULL };
 
 static Key keys[] = {
 	/* modifier             key    function        argument */
-	{ MODKEY,               33,    spawn,          {.v = dmenucmd } }, // p
+	{ MODKEY,               33,    spawn,          {.v = dmenucmd } }, // space
 	{ MODKEY|ShiftMask,     36,    spawn,          {.v = termcmd } }, // Return
-	{ MODKEY,               56,    togglebar,      {0} },             // b
+	{ MODKEY|ShiftMask,     56,    togglebar,      {0} },             // b
 	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j
 	{ MODKEY,               45,    focusstack,     {.i = -1 } },      // k
-	{ MODKEY,               31,    incnmaster,     {.i = +1 } },      // i
-	{ MODKEY,               40,    incnmaster,     {.i = -1 } },      // d
+	{ MODKEY|ShiftMask,     31,    incnmaster,     {.i = +1 } },      // i
+	{ MODKEY|ShiftMask,     40,    incnmaster,     {.i = -1 } },      // d
 	{ MODKEY,               43,    setmfact,       {.f = -0.05} },    // h
 	{ MODKEY,               46,    setmfact,       {.f = +0.05} },    // l
 	{ MODKEY,               36,    zoom,           {0} },             // Return
 	{ MODKEY,               23,    view,           {0} },             // Tab
-	{ MODKEY|ShiftMask,     54,    killclient,     {0} },             // c
-	{ MODKEY,               28,    setlayout,      {.v = &layouts[0]} }, // t
-	{ MODKEY,               41,    setlayout,      {.v = &layouts[1]} }, // f
-	{ MODKEY,               58,    setlayout,      {.v = &layouts[2]} }, // m
-	{ MODKEY,               65,    setlayout,      {0} },             // space
-	{ MODKEY|ShiftMask,     65,    togglefloating, {0} },             // space
+	{ MODKEY,               54,    killclient,     {0} },             // q
+	{ MODKEY|ShiftMask,     28,    setlayout,      {.v = &layouts[0]} }, // t
+	{ MODKEY|ShiftMask,     41,    setlayout,      {.v = &layouts[1]} }, // f
+	{ MODKEY|ShiftMask,     58,    setlayout,      {.v = &layouts[2]} }, // m
+	/* { MODKEY,               65,    setlayout,      {0} },             // space */
+	/* { MODKEY|ShiftMask,     65,    togglefloating, {0} },             // space */
 	{ MODKEY,               19,    view,           {.ui = ~0 } },     // 0
 	{ MODKEY|ShiftMask,     19,    tag,            {.ui = ~0 } },     // 0
 	{ MODKEY,               59,    focusmon,       {.i = -1 } },      // comma
