@@ -167,6 +167,7 @@ static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
+static void focustomon(const Arg *arg);
 static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
@@ -291,6 +292,8 @@ applyrules(Client *c)
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
 
+    fprintf(stdout, "[train] applying rule, c->name is %s \n", c->name);
+    fflush(stdout);
 	for (i = 0; i < LENGTH(rules); i++) {
 		r = &rules[i];
 		if ((!r->title || strstr(c->name, r->title))
@@ -830,6 +833,33 @@ focusmon(const Arg *arg)
 }
 
 void
+focustomon(const Arg *arg)
+{
+	Monitor *m;
+	unsigned int i;
+	m = mons;
+
+	while (mons->next && i != arg->i) {
+	    m = mons->next;
+	    i++;
+	}
+
+	if (m == selmon) {
+	    return;
+	}
+
+	// do fucus
+	unfocus(selmon->sel, 0);
+	selmon = m;
+	focus(NULL);
+
+//	if (!mons->next)
+//		return;
+//	if ((m = dirtomon(arg->i)) == selmon)
+//		return;
+}
+
+void
 focusstack(const Arg *arg)
 {
 	Client *c = NULL, *i;
@@ -986,6 +1016,8 @@ keypress(XEvent *e)
 	unsigned int i;
 	XKeyEvent *ev;
 
+    fprintf(stdout, "keypress %+v \n", e->xclient);
+    fflush(stdout);
 	ev = &e->xkey;
 	for (i = 0; i < LENGTH(keys); i++)
 		if (ev->keycode == keys[i].keycode
@@ -1027,6 +1059,10 @@ manage(Window w, XWindowAttributes *wa)
 	c->oldbw = wa->border_width;
 
 	updatetitle(c);
+
+	fprintf(stdout, "[train] updateting title \n", c->name);
+	fflush(stdout);
+
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;

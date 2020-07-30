@@ -58,6 +58,8 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "terminator", NULL };
+static const char *screenshotcmd[]  = { "flameshot", "gui", NULL };
+static const char *lockscreencmd[]  = { "slock", NULL };
 
 static Key keys[] = {
 	/* modifier             key    function        argument */
@@ -67,7 +69,9 @@ static Key keys[] = {
 	{ MODKEY,               36,    zoom,           {0} },             // Return
 
 	{ MODKEY,               24,    killclient,     {0} },             // q
-	/* 
+	{ MODKEY|ControlMask,   46,    spawn,          {.v = lockscreencmd} },             // l lock screen
+	{ MODKEY|ControlMask|ShiftMask,   38,    spawn,          {.v = screenshotcmd} },             // l lock screen
+	/*
 	{ MODKEY|ShiftMask,     56,    togglebar,      {0} },             // b
 	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j: switch focus
 	{ MODKEY,               45,    focusstack,     {.i = -1 } },      // k: swtich focus backward
@@ -88,6 +92,8 @@ static Key keys[] = {
 
 	{ MODKEY,               59,    focusmon,       {.i = -1 } },      // comma
 	{ MODKEY,               60,    focusmon,       {.i = +1 } },      // period
+	{ MODKEY|ShiftMask,               59,    focustomon,       {.i = 0 } },      // comma
+	{ MODKEY|ShiftMask,               60,    focustomon,       {.i = 1 } },      // period
 
 	/*
 	{ MODKEY|ShiftMask,     59,    tagmon,         {.i = -1 } },      // comma
