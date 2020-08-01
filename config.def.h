@@ -70,7 +70,7 @@ static Key keys[] = {
 
 	{ MODKEY,               24,    killclient,     {0} },             // q
 	{ MODKEY|ControlMask,   46,    spawn,          {.v = lockscreencmd} },             // l lock screen
-	{ MODKEY|ControlMask|ShiftMask,   38,    spawn,          {.v = screenshotcmd} },             // l lock screen
+	{ ControlMask|ShiftMask,38,    spawn,          {.v = screenshotcmd} },             // l lock screen
 	/*
 	{ MODKEY|ShiftMask,     56,    togglebar,      {0} },             // b
 	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j: switch focus
