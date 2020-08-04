@@ -62,6 +62,8 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "terminator", NULL };
 static const char *screenshotcmd[]  = { "flameshot", "gui", NULL };
 static const char *lockscreencmd[]  = { "slock", NULL };
+static const char *copyqinalbert[]  = { "albert", "show", "v ", NULL };
+
 
 static Key keys[] = {
 	/* modifier             key    function        argument */
@@ -72,8 +74,9 @@ static Key keys[] = {
 
 	{ MODKEY,               24,    killclient,     {0} },             // q
 	{ MODKEY|ControlMask,   46,    spawn,          {.v = lockscreencmd} },             // l lock screen
-	{ ControlMask|ShiftMask,38,    spawn,          {.v = screenshotcmd} },             // l lock screen
+	{ ControlMask|ShiftMask,38,    spawn,          {.v = screenshotcmd} },             // a screen shot
         { MODKEY,               95,    togglebar,      {0} },             // F11 toggle top bar
+	{ MODKEY|ShiftMask,     55,    spawn,          {.v = copyqinalbert} },             // v copyq in albert
 	/*
 	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j: switch focus
 	{ MODKEY,               45,    focusstack,     {.i = -1 } },      // k: swtich focus backward
