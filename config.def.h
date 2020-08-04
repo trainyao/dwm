@@ -29,6 +29,8 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+    { "钉钉",      NULL,       NULL,       1 << 7,       0,           -1 },
+    { "GoLand",      NULL,       NULL,    1     ,       0,           -1 },
 };
 
 /* layout(s) */
@@ -71,8 +73,8 @@ static Key keys[] = {
 	{ MODKEY,               24,    killclient,     {0} },             // q
 	{ MODKEY|ControlMask,   46,    spawn,          {.v = lockscreencmd} },             // l lock screen
 	{ ControlMask|ShiftMask,38,    spawn,          {.v = screenshotcmd} },             // l lock screen
+        { MODKEY,               95,    togglebar,      {0} },             // F11 toggle top bar
 	/*
-	{ MODKEY|ShiftMask,     56,    togglebar,      {0} },             // b
 	{ MODKEY,               44,    focusstack,     {.i = +1 } },      // j: switch focus
 	{ MODKEY,               45,    focusstack,     {.i = -1 } },      // k: swtich focus backward
 	{ MODKEY|ShiftMask,     31,    incnmaster,     {.i = +1 } },      // i
