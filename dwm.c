@@ -178,6 +178,7 @@ static void grabkeys(void);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
+static void mapkey(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -270,7 +271,8 @@ static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
 
 /* configuration, allows nested code to access above variables */
-#include "config.h"
+// #include "config.h"
+#include "config.def.h"
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
 struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
@@ -419,6 +421,9 @@ attachstack(Client *c)
 void
 buttonpress(XEvent *e)
 {
+    fprintf(stdout, "buttonpress \n");
+    fflush(stdout);
+
 	unsigned int i, x, click;
 	Arg arg = {0};
 	Client *c;
@@ -1021,9 +1026,94 @@ keypress(XEvent *e)
 	ev = &e->xkey;
 	for (i = 0; i < LENGTH(keys); i++)
 		if (ev->keycode == keys[i].keycode
-		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
-		&& keys[i].func)
-			keys[i].func(&(keys[i].arg));
+		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state))
+		    if (keys[i].func) {
+		        if (keys[i].func == mapkey) {
+                    XClassHint *ch;
+                    ch = XAllocClassHint();
+                    XGetClassHint(dpy, selmon->sel->win, ch);
+                    fprintf(stdout, "wm class %s %s \n", ch->res_name, ch->res_class);
+                    fflush(stdout);
+
+                    unsigned int j;
+                    for (j = 0; j < LENGTH(keymapping); j++) {
+                    fprintf(stdout, "wm class %s emb %d ekb %d \n mb %d kb %d  ma %d ka %d \n", keymapping[j].wm_name,
+			CLEANMASK(ev->state), 
+			ev->keycode,
+                        keymapping[j].modifier_before,
+			keymapping[j].keycode_before,
+                        keymapping[j].modifier_after,
+			keymapping[j].keycode_after
+				    );
+
+                    /* fprintf(stdout, "wm class %d emb %b ekb %b \n mb %d kb %d  ma %d ka %d \n",
+                        strstr(ch->res_name, keymapping[j].wm_name),
+                        ev->keycode == keymapping[j].keycode_before &&
+                        CLEANMASK(ev->state) == keymapping[j].modifier_before &&
+
+                        ev->keycode != keymapping[j].keycode_after &&
+                        CLEANMASK(ev->state) != keymapping[j].modifier_after &&
+
+			CLEANMASK(ev->state), 
+			ev->keycode,
+                        keymapping[j].modifier_before,
+			keymapping[j].keycode_before,
+                        keymapping[j].modifier_after,
+			keymapping[j].keycode_after
+				    );
+				    */
+
+
+                    fflush(stdout);
+
+
+                        if (
+                        strstr(ch->res_name, keymapping[j].wm_name) &&
+                        ev->keycode == keymapping[j].keycode_before &&
+                        CLEANMASK(ev->state) == keymapping[j].modifier_before &&
+                        // mode and not the same
+                        (ev->keycode != keymapping[j].keycode_after ||
+                        CLEANMASK(ev->state) != keymapping[j].modifier_after) &&
+                        // selmon->sel exists
+                        selmon && selmon->sel
+                        ) {
+
+                    fprintf(stdout, "match!!!!!!! %s \n", keymapping[j].wm_name);
+                    fflush(stdout);
+                            XKeyEvent xkey;
+                            xkey.type =  KeyPress;
+                            xkey.display = dpy;
+                            xkey.window = selmon->sel->win;
+                            xkey.root = root;
+                            xkey.subwindow = None;
+                            xkey.time = 1000;
+                            xkey.x = 0;
+                            xkey.y = 0;
+                            xkey.x_root = 0;
+                            xkey.y_root = 0;
+                            xkey.same_screen = True;
+                            xkey.keycode = keymapping[j].keycode_after;
+                            xkey.state = keymapping[j].modifier_after;
+
+			    XSelectInput(dpy, selmon->sel->win, KeyPressMask|KeyReleaseMask);
+                            XSendEvent(dpy, selmon->sel->win, False, KeyPressMask, (XEvent *)(&xkey));
+
+			    XSelectInput(dpy, root, KeyPressMask|KeyReleaseMask);
+                            XSendEvent(dpy, root, False, KeyPressMask, (XEvent *)(&xkey));
+
+                            break;
+                        }
+                    }
+
+                    XFree(ch);
+                    fprintf(stdout, "================== in else end \n");
+                    fflush(stdout);
+		        } else {
+                    keys[i].func(&(keys[i].arg));
+		        }
+		    }
+
+
 }
 
 void
@@ -1040,6 +1130,10 @@ killclient(const Arg *arg)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+}
+
+void
+mapkey(const Arg *arg) {
 }
 
 void
@@ -1624,6 +1718,8 @@ setup(void)
 		|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask;
 	XChangeWindowAttributes(dpy, root, CWEventMask|CWCursor, &wa);
 	XSelectInput(dpy, root, wa.event_mask);
+
+    // 设置 config.def.h 里的 key 触发 keypress 函数
 	grabkeys();
 	focus(NULL);
 }

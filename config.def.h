@@ -18,6 +18,14 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
+typedef struct {
+	char *wm_name;
+	unsigned int modifier_before;
+	unsigned int keycode_before;
+	unsigned int modifier_after;
+	unsigned int keycode_after;
+} KeyMapping;
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "~"};
 
@@ -64,6 +72,14 @@ static const char *screenshotcmd[]  = { "flameshot", "gui", NULL };
 static const char *lockscreencmd[]  = { "slock", NULL };
 static const char *copyqinalbert[]  = { "albert", "show", "v ", NULL };
 
+static const KeyMapping keymapping[] = {
+    {"jetbrains-goland", MODKEY|ShiftMask, 34, ControlMask|ShiftMask, 34},
+    {"google-chrome", MODKEY|ShiftMask, 34, ControlMask|ShiftMask, 23},
+
+    {"jetbrains-goland", MODKEY|ShiftMask, 35, ControlMask|ShiftMask, 35},
+    {"google-chrome", MODKEY|ShiftMask, 35, ControlMask, 23},
+};
+
 
 static Key keys[] = {
 	/* modifier             key    function        argument */
@@ -99,6 +115,8 @@ static Key keys[] = {
 	{ MODKEY,               60,    focusmon,       {.i = +1 } },      // period
 	{ MODKEY|ShiftMask,               59,    focustomon,       {.i = 0 } },      // comma
 	{ MODKEY|ShiftMask,               60,    focustomon,       {.i = 1 } },      // period
+
+    { MODKEY|ShiftMask,               34,    mapkey,       {0} },      // period
 
 	/*
 	{ MODKEY|ShiftMask,     59,    tagmon,         {.i = -1 } },      // comma
