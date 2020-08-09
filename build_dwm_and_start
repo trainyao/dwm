@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# cd /home/trainyao/data/src/dwm && make install clean
+
+/home/trainyao/data/src/dwm/dwm-bar/dwm_bar.sh &
+dwm >> /home/trainyao/.dwm.log 2>&1
